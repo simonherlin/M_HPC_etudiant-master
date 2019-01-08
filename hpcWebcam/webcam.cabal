@@ -1,0 +1,16 @@
+name:               webcam
+version:            0.1
+build-type:         Simple
+license:            MIT
+cabal-version:      >=1.10
+
+executable webcam
+    main-is:            Main.hs
+    ghc-options:        -Wall -O2 -threaded
+    default-language:   Haskell2010
+    build-depends:      base,
+                        bytestring,
+                        linear,
+                        opencv,
+                        scotty
+
