@@ -26,4 +26,3 @@ if __name__ == '__main__':
     tester_fonction("Cyclique2", lambda : hpcThreads.fiboCyclique2(NB_DATA)) 
     tester_fonction("CycliqueN", lambda : hpcThreads.fiboCycliqueN(NB_DATA, 4))
     tester_fonction("CycliqueN", lambda : hpcThreads.fiboCycliqueN(NB_DATA, 8))
-    # TODO
