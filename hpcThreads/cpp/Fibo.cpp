@@ -37,22 +37,44 @@ namespace Fibo {
   }
 
   //////////////////////////////////////////////////////////////////////
+  
+  void calculerBloc(std::vector<int> &data, int begin, int end){
+    for(unsigned i = begin; i < end; i++){
+      data[i] = FibonacciMod42(i);
+    }  
+  }  
 
   std::vector<int> fiboBlocs(int nbData) {
     // cree le tableau de donnees a calculer
     std::vector<int> data(nbData); 
     // calculer sur deux threads, par bloc
-    // TODO
+    int dataSize = data.size();
+    std::thread th1(Fibo::calculerBloc, std::ref(data), 0, dataSize/2);
+    std::thread th2(Fibo::calculerBloc, std::ref(data), dataSize/2, dataSize);
+    th1.join();
+    th2.join();
+
     return data;
   }
 
   //////////////////////////////////////////////////////////////////////
 
+  void calculCyclique(std::vector<int> &data, int begin, int step){
+    for(unsigned i = begin; i < data.size(); i += step){
+      data[i] = FibonacciMod42(i);
+    }	
+  }
+
   std::vector<int> fiboCyclique2(int nbData) {
     // cree le tableau de donnees a calculer
     std::vector<int> data(nbData); 
     // calculer sur deux threads, cycliquement
-    // TODO
+    std::thread th1(Fibo::calculCyclique, std::ref(data), 0, 2);
+    std::thread th2(Fibo::calculCyclique, std::ref(data), 1, 2);
+
+    th1.join();
+    th2.join();
+
     return data;
   }
 
@@ -60,19 +82,32 @@ namespace Fibo {
 
   std::vector<int> fiboCycliqueN(int nbData, int nbProc) {
     // cree le tableau de donnees a calculer
-    std::vector<int> data(nbData); 
-    // calculer sur N threads, cycliquement
-    // TODO
+    std::vector<int> data(nbData);
+    std::vector<std::thread> threads(nbProc);
+
+    for(unsigned i = 0; i < threads.size(); i++){
+	    threads[i] = std::thread(Fibo::calculCyclique, std::ref(data), i, nbProc);
+    }
+     
+    for(unsigned i = 0; i < threads.size(); i++){
+	    threads[i].join();
+    } 
     return data;
   }
 
   //////////////////////////////////////////////////////////////////////
 
   void fiboCycliqueNFake(int nbData, int nbProc) {
-    // calculer sur N threads, cycliquement, en ignorant le résultat
-    // TODO
-    
+    std::vector<int> data(nbData);
+    std::vector<std::thread> threads(nbProc);
+
+    for(unsigned i = 0; i < threads.size(); i++){
+	    threads[i] = std::thread(Fibo::calculCyclique, std::ref(data), i, nbProc);
+    }
+     
+    for(unsigned i = 0; i < threads.size(); i++){
+	    threads[i].join();
+    }
   }
 
-}  // namespace Fibo
-
+} // namespace Fibo
